@@ -11,6 +11,8 @@
 #include "ActionRPG/DataAsset/InputConfigDataAsset.h"
 #include "ActionRPG/Conponents/Input/WarriorInputComponent.h"
 #include "ActionRPG/Utils/ActionRPGGamePlayTags.h"
+#include "ActionRPG/AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "ActionRPG/DataAsset/MyDataAsset_WarriorStartUpData.h"
 
 AWarriorCharacter::AWarriorCharacter()
 {
@@ -34,6 +36,19 @@ AWarriorCharacter::AWarriorCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+}
+
+void AWarriorCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	//TSoftObjectPtr은 에셋 참조 경로를 가지는 구조체기 때문에 IsNull나 IsValid사용해야함
+	if (!CharacterStartUpData.IsNull())
+	{
+		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous())
+		{
+			LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
+		}
+	}
 }
 
 void AWarriorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
