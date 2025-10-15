@@ -2,4 +2,27 @@
 
 
 #include "MyDataAsset_WarriorStartUpData.h"
+#include "ActionRPG/AbilitySystem/WarriorGameplayAbility.h"
+#include "ActionRPG/AbilitySystem/WarriorAbilitySystemComponent.h"
 
+bool FWarriorHeroAbilitySet::IsValid() const
+{
+    return InputTag.IsValid() && AbilityToGrant;
+}
+
+void UMyDataAsset_WarriorStartUpData::GiveToAbilitySystemComponent(UWarriorAbilitySystemComponent* InASCToGive, int32 ApplyLevel)
+{
+    Super::GiveToAbilitySystemComponent(InASCToGive, ApplyLevel);
+
+    for (const FWarriorHeroAbilitySet& AbilitySet : HeroStartUpAbilitySets)
+    {
+        if (!AbilitySet.IsValid()) continue;
+
+        FGameplayAbilitySpec AbilitySpec(AbilitySet.AbilityToGrant);
+        AbilitySpec.SourceObject = InASCToGive->GetAvatarActor();
+        AbilitySpec.Level = ApplyLevel;
+        AbilitySpec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);
+
+        InASCToGive->GiveAbility(AbilitySpec);
+    }
+}

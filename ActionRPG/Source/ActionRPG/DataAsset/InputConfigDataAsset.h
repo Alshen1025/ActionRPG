@@ -24,6 +24,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UInputAction* InputAction;
+	
+	bool IsVaild() const
+	{
+		//Tag와 Action 여부 확인
+		return InputTag.IsValid() && InputAction;
+	}
 };
 
 UCLASS()
@@ -38,6 +44,10 @@ public:
 	//입력 구조체를 담을 배열
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
 	TArray<FWarriorInputActionConfig> NativeInputActions;
+
+	//Ability 입력 구조체를 담을 배열
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
+	TArray<FWarriorInputActionConfig> AbilityInputActions;
 
 	UInputAction* FindNativeInputActionByTag(const FGameplayTag& InInputTag) const;
 };

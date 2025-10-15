@@ -2,13 +2,15 @@
 
 #include "CoreMinimal.h"
 #include "ActionRPGBaseCharacter.h"
+#include "GameplayTagContainer.h"
+#include "InputAction.h"
 #include "WarriorCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
 class UInputConfigDataAsset;
 struct FInputActionValue;
-
+class UHeroCombatComponent;
 
 UCLASS()
 class ACTIONRPG_API AWarriorCharacter : public AActionRPGBaseCharacter
@@ -34,6 +36,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UHeroCombatComponent* CombatComponent;
+
 #pragma endregion
 
 
@@ -45,5 +50,13 @@ private:
 	void Input_Move(const FInputActionValue& InputActionValue);
 	void Input_Look(const FInputActionValue& InputActionValue);
 
+	void Input_AbilityInputPressed(const FInputActionInstance&, FGameplayTag InputTag);
+	void Input_AbilityInputReleased(const FInputActionInstance&, FGameplayTag InputTag);
+
+#pragma endregion
+
+#pragma region Getter/Setter
+public:
+	FORCEINLINE UHeroCombatComponent* GetHeroCombatComponent() const { return CombatComponent; }
 #pragma endregion
 };

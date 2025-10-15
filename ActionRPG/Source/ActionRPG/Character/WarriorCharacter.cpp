@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "WarriorCharacter.h"
 #include "ActionRPG/Utils/DebugHelper.h"
 #include "Components/CapsuleComponent.h"
@@ -13,6 +10,8 @@
 #include "ActionRPG/Utils/ActionRPGGamePlayTags.h"
 #include "ActionRPG/AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "ActionRPG/DataAsset/MyDataAsset_WarriorStartUpData.h"
+#include "ActionRPG/Conponents/Combat/HeroCombatComponent.h"
+
 
 AWarriorCharacter::AWarriorCharacter()
 {
@@ -36,6 +35,8 @@ AWarriorCharacter::AWarriorCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+
+	CombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
 }
 
 void AWarriorCharacter::PossessedBy(AController* NewController)
@@ -67,6 +68,8 @@ void AWarriorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+
+	WarriorInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
 
 void AWarriorCharacter::BeginPlay()
@@ -113,4 +116,15 @@ void AWarriorCharacter::Input_Look(const FInputActionValue& InputActionValue)
 	{
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+//입력 발생 시 어빌리티 컴포넌트에 전달.
+void AWarriorCharacter::Input_AbilityInputPressed(const FInputActionInstance&,  FGameplayTag InputTag)
+{
+	WarriorAbilitySystemComponent->OnAbilityInputPressed(InputTag);
+}
+
+void AWarriorCharacter::Input_AbilityInputReleased(const FInputActionInstance&, FGameplayTag InputTag)
+{
+	WarriorAbilitySystemComponent->OnAbilityInputReleased(InputTag);
 }

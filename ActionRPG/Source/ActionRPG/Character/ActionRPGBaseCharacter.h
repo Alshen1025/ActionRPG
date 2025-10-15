@@ -18,7 +18,7 @@ class ACTIONRPG_API AActionRPGBaseCharacter : public ACharacter, public IAbility
 
 public:
 	AActionRPGBaseCharacter();
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 
 

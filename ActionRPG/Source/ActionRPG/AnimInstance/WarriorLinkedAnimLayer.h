@@ -6,6 +6,7 @@
 #include "ActionRPGAnimInstanceBase.h"
 #include "WarriorLinkedAnimLayer.generated.h"
 
+class UWarriorCharacterAnimInstance;
 /**
  * 
  */
@@ -14,4 +15,8 @@ class ACTIONRPG_API UWarriorLinkedAnimLayer : public UActionRPGAnimInstanceBase
 {
 	GENERATED_BODY()
 	
+
+public:
+	UFUNCTION(BlueprintPure, meta = (BlueprintThreadSafe))
+	UWarriorCharacterAnimInstance* GetHeroAnimInstance() const;
 };

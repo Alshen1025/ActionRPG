@@ -17,7 +17,7 @@ class ACTIONRPG_API UWarriorCharacterAnimInstance : public UActionRPGAnimInstanc
 	
 public:
 	virtual void NativeInitializeAnimation() override;
-	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds);
+	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds ) override;
 
 protected:
 	UPROPERTY()
