@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "WarriorWeaponBase.h"
 #include "ActionRPG/WarriorTypes/WarriorStructTypes.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "WarriorWeapon.generated.h"
 
 /**
@@ -19,4 +20,14 @@ public:
 	//AnimLayer정보를 담은 구조체
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WeaponData")
 	FWarriorHeroWeaponData HeroWeaponData;
+
+	UFUNCTION(BlueprintCallable)
+	void AssignGrantedAbilitySpecHandles(const TArray<FGameplayAbilitySpecHandle>& InSpecHandles);
+
+	UFUNCTION(BlueprintPure)
+	TArray<FGameplayAbilitySpecHandle> GetGrantedAbilitySpecHandles() const;
+
+private:
+	TArray<FGameplayAbilitySpecHandle> GrantedAbilitySpecHandles;
+
 };
