@@ -20,6 +20,10 @@ class ACTIONRPG_API AWarriorCharacter : public AActionRPGBaseCharacter
 public:
 	AWarriorCharacter();
 
+#pragma region PawnCombatInterface
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
+#pragma endregion
+
 protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

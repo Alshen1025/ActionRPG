@@ -30,4 +30,10 @@ namespace WarriorGameplayTags
 
 	//Status
 	UE_DEFINE_GAMEPLAY_TAG(Player_Status_JumpToFinisher, "Player.Status.JumpToFinisher");
+
+	//적대 몬스터
+	UE_DEFINE_GAMEPLAY_TAG(Enemy_Weapon, "Enemy.Weapon");
+
+	//Public Tag
+	UE_DEFINE_GAMEPLAY_TAG(Public_Event_MeleeHit, "Public.Event.MeleeHit");
 }

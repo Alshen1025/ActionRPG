@@ -31,3 +31,8 @@ UAbilitySystemComponent* AActionRPGBaseCharacter::GetAbilitySystemComponent() co
 {
 	return GetWarriorAbilitySystemComponent();
 }
+
+UPawnCombatComponent* AActionRPGBaseCharacter::GetPawnCombatComponent() const
+{
+	return nullptr;
+}

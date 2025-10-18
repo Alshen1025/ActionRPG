@@ -8,6 +8,8 @@
 
 class UWarriorGameplayAbility;
 class UWarriorAbilitySystemComponent;
+class UGameplayEffect;
+
 
 UCLASS()
 class ACTIONRPG_API UDataAsset_StartUpDataBase : public UDataAsset
@@ -26,4 +28,8 @@ protected:
 	TArray< TSubclassOf<UWarriorGameplayAbility>> ReactiveAbilities;
 
 	void GrantAbilities(const TArray< TSubclassOf < UWarriorGameplayAbility > >& InAbilitiesToGive, UWarriorAbilitySystemComponent* InASCToGive, int32 ApplyLevel = 1);
+
+	//GamePlayEffect ¹è¿­
+	UPROPERTY(EditDefaultsOnly, Category = "StartUpData")
+	TArray< TSubclassOf < UGameplayEffect > > StartUpGameplayEffects;
 };

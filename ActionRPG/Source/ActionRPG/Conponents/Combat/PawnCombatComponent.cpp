@@ -1,6 +1,8 @@
 
 #include "PawnCombatComponent.h"
-
+#include "ActionRPG/Items/Weapon/WarriorWeaponBase.h"
+#include "Components/BoxComponent.h"
+#include "ActionRPG/Utils/DebugHelper.h"
 void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag WeaponTag, AWarriorWeaponBase* Weapon, bool bResiterAsEquippedWeapon)
 {
 	checkf(!CharacterCarriedWeaponMap.Contains(WeaponTag), TEXT("A named named %s has already been added as carried weapon"),*WeaponTag.ToString());
@@ -8,6 +10,10 @@ void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag WeaponTag, AWarrio
 
 	//가지고 있는 무기 배열에 태그와 무기 추가
 	CharacterCarriedWeaponMap.Emplace(WeaponTag, Weapon);
+
+	//Hit Delegate 등록
+	Weapon->OnWeaponHitTarget.BindUObject(this, &ThisClass::OnHitTargetActor);
+	Weapon->OnWeaponPulledFromTarget.BindUObject(this, &ThisClass::OnWeaponPulledFromTargetActor);
 
 	//bResiterAsEquippedWeapon = 등록한 무기를 바로 장착할 지 여부
 	//true면 바로 장착
@@ -39,4 +45,35 @@ AWarriorWeaponBase* UPawnCombatComponent::GetCurrentEquippedWeapon() const
 		return nullptr;
 	}
 	return GetCharacterCarriedWeaponByTag(CurrentEquippedWeaponTag);
+}
+
+void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+{
+	//DamageType이 CurrentEquippedWeapon인지 확인 -> 맨손이면 무기 Collision을 Toggle할 필요 없음
+	if (ToggleDamageType == EToggleDamageType::CurrentEquippedWeapon)
+	{
+		AWarriorWeaponBase* WeaponToToggle = GetCurrentEquippedWeapon();
+
+		check(WeaponToToggle);
+
+		if (bShouldEnable)
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		}
+		else
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			OverlappedActors.Empty();
+		}
+	}
+}
+
+void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
+{
+
+}
+
+void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
+{
+
 }

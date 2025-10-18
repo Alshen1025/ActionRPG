@@ -33,4 +33,10 @@ namespace WarriorGameplayTags
 
 	//Status
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_JumpToFinisher);
+
+	//적대 몬스터
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
+
+	//Public Tag
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Public_Event_MeleeHit);
 }

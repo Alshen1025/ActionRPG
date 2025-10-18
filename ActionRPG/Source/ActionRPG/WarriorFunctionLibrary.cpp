@@ -4,7 +4,7 @@
 #include "WarriorFunctionLibrary.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "ActionRPG/AbilitySystem/WarriorAbilitySystemComponent.h"
-
+#include "ActionRPG/Interface/PawnCombatInterface.h"
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActior(AActor* Actor)
 {
 	check(Actor);
@@ -48,4 +48,26 @@ bool UWarriorFunctionLibrary::NativeDoesActorHaveTag(AActor* InActor, FGameplayT
 void UWarriorFunctionLibrary::BP_DoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck, EWarriorConfirmType& OutConfirmType)
 {
 	OutConfirmType = NativeDoesActorHaveTag(InActor, TagToCheck) ? EWarriorConfirmType::Yes : EWarriorConfirmType::No;
+}
+
+UPawnCombatComponent* UWarriorFunctionLibrary::NativeGetPawnCombatComponentFromActor(AActor* InActor)
+{
+	check(InActor);
+
+	//Actor의 CombatComponenet 가져오기
+	if (IPawnCombatInterface* PawnCombatInterface = Cast<IPawnCombatInterface>(InActor))
+	{
+		return PawnCombatInterface->GetPawnCombatComponent();
+	}
+
+	return nullptr;
+}
+
+UPawnCombatComponent* UWarriorFunctionLibrary::BP_GetPawnCombatComponentFromActor(AActor* InActor, EWarriorValidType& OutValidType)
+{
+	UPawnCombatComponent* CombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
+
+	OutValidType = CombatComponent ? EWarriorValidType::Valid : EWarriorValidType::Invalid;
+
+	return CombatComponent;
 }
