@@ -47,5 +47,8 @@ namespace WarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Player_SetByCaller_AttackType_Heavy, "Player.SetByCaller.AttackType.Heavy");
 
 	UE_DEFINE_GAMEPLAY_TAG(Public_Ability_HitReact, "Public.Ability.HitReact");
-	UE_DEFINE_GAMEPLAY_TAG(Public_Event_HitReact, "Public.Event.HitReact");
+	UE_DEFINE_GAMEPLAY_TAG(Public_Event_HitReact, "Public.Event.HitReact"); 
+
+	UE_DEFINE_GAMEPLAY_TAG(Public_Status_Dead, "Public.Status.Dead");
+	UE_DEFINE_GAMEPLAY_TAG(Public_Ability_Death, "Public.Ability.Death");
 }

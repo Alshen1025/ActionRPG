@@ -36,3 +36,8 @@ UPawnCombatComponent* AActionRPGBaseCharacter::GetPawnCombatComponent() const
 {
 	return nullptr;
 }
+
+UPawnUIComponent* AActionRPGBaseCharacter::GetPawnUIComponent() const
+{
+	return nullptr;
+}

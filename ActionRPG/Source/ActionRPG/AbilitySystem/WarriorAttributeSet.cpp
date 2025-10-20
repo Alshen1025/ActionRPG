@@ -4,6 +4,12 @@
 #include "WarriorAttributeSet.h"
 #include "GameplayEffectExtension.h"
 #include "ActionRPG/Utils/DebugHelper.h"
+#include "ActionRPG/WarriorFunctionLibrary.h"
+#include"ActionRPG/Utils/ActionRPGGamePlayTags.h"
+#include "ActionRPG/Interface/PawnUIInterface.h"
+#include "ActionRPG/Conponents/UI/PawnUIComponent.h"
+#include "ActionRPG/Conponents/UI/HeroUIComponent.h"
+
 UWarriorAttributeSet::UWarriorAttributeSet()
 {
 	InitCurrentHealth(1.f);
@@ -16,11 +22,26 @@ UWarriorAttributeSet::UWarriorAttributeSet()
 
 void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
+	//UI컴포넌트 확인
+	if (!CachedPawnUIInterface.IsValid())
+	{
+		CachedPawnUIInterface = TWeakInterfacePtr<IPawnUIInterface>(Data.Target.GetAvatarActor());
+	}
+
+	checkf(CachedPawnUIInterface.IsValid(), TEXT("%s didn't implement IPawnUIInterface"), *Data.Target.GetAvatarActor()->GetActorNameOrLabel());
+
+	UPawnUIComponent* PawnUIComponent = CachedPawnUIInterface->GetPawnUIComponent();
+
+	checkf(PawnUIComponent, TEXT("Couldn't extract a PawnUIComponent from %s"), *Data.Target.GetAvatarActor()->GetActorNameOrLabel());
+
+	//Attibute 업데이트
 	if (Data.EvaluatedData.Attribute == GetCurrentHealthAttribute())
 	{
 		const float NewCurrentHealth = FMath::Clamp(GetCurrentHealth(), 0.f, GetMaxHealth());
 
 		SetCurrentHealth(NewCurrentHealth);
+		//Delegate BroadCast호출
+		PawnUIComponent->OnCurrentHealthChanged.Broadcast(GetCurrentHealth() / GetMaxHealth());
 	}
 
 	if (Data.EvaluatedData.Attribute == GetCurrentRageAttribute())
@@ -28,6 +49,12 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 		const float NewCurrentRage = FMath::Clamp(GetCurrentRage(), 0.f, GetMaxRage());
 
 		SetCurrentRage(NewCurrentRage);
+
+		//Delegate BroadCast호출
+		if (UHeroUIComponent* HeroUIComponent = CachedPawnUIInterface->GetHeroUIComponent())
+		{
+			HeroUIComponent->OnCurrentRageChanged.Broadcast(GetCurrentRage() / GetMaxRage());
+		}
 	}
 
 	if (Data.EvaluatedData.Attribute == GetDamageTakenAttribute())
@@ -39,21 +66,14 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 
 		SetCurrentHealth(NewCurrentHealth);
 
-		/*const FString DebugString = FString::Printf(
-			TEXT("Old Health: %f, Damage Done: %f, NewCurrentHealth: %f"),
-			OldHealth,
-			DamageDone,
-			NewCurrentHealth
-		);
-
-		Debug::Print(DebugString, FColor::Green);*/
-
-		//TODO::Notify the UI 
+		//Delegate BroadCast호출
+		PawnUIComponent->OnCurrentHealthChanged.Broadcast(GetCurrentHealth() / GetMaxHealth());
 
 		//TODO::Handle character death
-		if (NewCurrentHealth == 0.f)
+		if (GetCurrentHealth() == 0.f)
 		{
-
+			//체력이 0이면 Dead태그 추가
+			UWarriorFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), WarriorGameplayTags::Public_Status_Dead);
 		}
 	}
 }

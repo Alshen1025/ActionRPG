@@ -11,6 +11,7 @@ class UCameraComponent;
 class UInputConfigDataAsset;
 struct FInputActionValue;
 class UHeroCombatComponent;
+class UHeroUIComponent;
 
 UCLASS()
 class ACTIONRPG_API AWarriorCharacter : public AActionRPGBaseCharacter
@@ -23,6 +24,12 @@ public:
 #pragma region PawnCombatInterface
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 #pragma endregion
+
+#pragma region PawnUIInterface
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	virtual UHeroUIComponent* GetHeroUIComponent() const override;
+#pragma endregion
+
 
 protected:
 	virtual void PossessedBy(AController* NewController) override;
@@ -42,6 +49,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UHeroCombatComponent* CombatComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	UHeroUIComponent* HeroUIComponent;
 
 #pragma endregion
 

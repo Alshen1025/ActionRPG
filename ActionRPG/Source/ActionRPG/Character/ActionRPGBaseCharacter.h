@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "ActionRPG/Interface/PawnCombatInterface.h"
+#include "ActionRPG/Interface/PawnUIInterface.h"
 #include "ActionRPGBaseCharacter.generated.h"
 
 class UWarriorAbilitySystemComponent;
@@ -13,7 +14,7 @@ class UWarriorAttributeSet;
 class UDataAsset_StartUpDataBase;
 
 UCLASS()
-class ACTIONRPG_API AActionRPGBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface
+class ACTIONRPG_API AActionRPGBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface, public IPawnUIInterface
 {
 	GENERATED_BODY()
 
@@ -27,6 +28,9 @@ public:
 	//IPawnCombatInterface 순수 가상함수 구현
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 #pragma endregion
+
+	//UIInterFace
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 
 protected:
 	//

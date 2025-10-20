@@ -7,6 +7,7 @@
 #include "WarriorEnemyCharacter.generated.h"
 
 class UEnemyCombatComponent;
+class UEnemyUIComponent;
 
 UCLASS()
 class ACTIONRPG_API AWarriorEnemyCharacter : public AActionRPGBaseCharacter
@@ -20,9 +21,16 @@ public:
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 #pragma endregion
 
+	//PawnUIInterface
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	virtual UEnemyUIComponent* GetEnemyUIComponent() const override;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	UEnemyCombatComponent* EnemyCombatComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UEnemyUIComponent* EnemyUIComponent;
 
 	virtual void PossessedBy(AController* NewController) override;
 

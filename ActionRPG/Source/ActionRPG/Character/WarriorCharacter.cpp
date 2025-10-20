@@ -11,6 +11,7 @@
 #include "ActionRPG/AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "ActionRPG/DataAsset/MyDataAsset_WarriorStartUpData.h"
 #include "ActionRPG/Conponents/Combat/HeroCombatComponent.h"
+#include "ActionRPG/Conponents/UI/HeroUIComponent.h"
 
 
 AWarriorCharacter::AWarriorCharacter()
@@ -37,11 +38,22 @@ AWarriorCharacter::AWarriorCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
 	CombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
+	HeroUIComponent = CreateDefaultSubobject<UHeroUIComponent>(TEXT("HeroUIComponent"));
 }
 
 UPawnCombatComponent* AWarriorCharacter::GetPawnCombatComponent() const
 {
 	return CombatComponent;
+}
+
+UPawnUIComponent* AWarriorCharacter::GetPawnUIComponent() const
+{
+	return HeroUIComponent;
+}
+
+UHeroUIComponent* AWarriorCharacter::GetHeroUIComponent() const
+{
+	return HeroUIComponent;
 }
 
 void AWarriorCharacter::PossessedBy(AController* NewController)

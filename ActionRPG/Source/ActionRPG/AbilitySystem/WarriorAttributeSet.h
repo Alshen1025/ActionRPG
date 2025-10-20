@@ -7,6 +7,8 @@
 #include "ActionRPG/AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "WarriorAttributeSet.generated.h"
 
+class IPawnUIInterface;
+
 //Attribute에 대한 접근자 함수를 자동으로 만들어주는 매크로
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
@@ -52,5 +54,8 @@ public:
 		UPROPERTY(BlueprintReadOnly, Category = "Damage")
 	FGameplayAttributeData DamageTaken;
 	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, DamageTaken)
+
+private:
+	TWeakInterfacePtr<IPawnUIInterface> CachedPawnUIInterface;
 };
 
