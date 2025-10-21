@@ -8,6 +8,8 @@
 
 class UEnemyCombatComponent;
 class UEnemyUIComponent;
+class UWidgetComponent;
+
 
 UCLASS()
 class ACTIONRPG_API AWarriorEnemyCharacter : public AActionRPGBaseCharacter
@@ -26,6 +28,8 @@ public:
 	virtual UEnemyUIComponent* GetEnemyUIComponent() const override;
 
 protected:
+	virtual void BeginPlay() override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	UEnemyCombatComponent* EnemyCombatComponent;
 
@@ -33,6 +37,9 @@ protected:
 	UEnemyUIComponent* EnemyUIComponent;
 
 	virtual void PossessedBy(AController* NewController) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UWidgetComponent* EnemyHealthWidgetComponent;
 
 private:
 	void InitEnemyStartUpData();

@@ -6,9 +6,10 @@
 #include "ActionRPG/Conponents/UI/PawnUIComponent.h"
 #include "HeroUIComponent.generated.h"
 
-/**
- * 
- */
+//무기 아이콘 업데이트
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEquippedWeaponChangedDelegate, TSoftObjectPtr<UTexture2D>, SoftWeaponIcon);
+
+
 UCLASS()
 class ACTIONRPG_API UHeroUIComponent : public UPawnUIComponent
 {
@@ -17,4 +18,7 @@ class ACTIONRPG_API UHeroUIComponent : public UPawnUIComponent
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnPercentChangedDelegate OnCurrentRageChanged;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnEquippedWeaponChangedDelegate OnEquippedWeaponChanged;
 };
