@@ -2,7 +2,7 @@
 
 
 #include "WarriorAbilitySystemComponent.h"
-#include "ActionRPG/AbilitySystem/WarriorGameplayAbility.h"
+#include "ActionRPG/AbilitySystem/WarriorHeroGameplayAbility.h"
 
 void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InputTag)
 {
@@ -62,4 +62,35 @@ void UWarriorAbilitySystemComponent::RemovedGrantedHeroWeaponAbilities(UPARAM(re
 		}
 	}
 	InSpecHandlesToRemove.Empty();
+}
+
+//여러개의 어빌리티 중 랜덤으로 하나 활성화
+bool UWarriorAbilitySystemComponent::TryActivateAbilityByTag(FGameplayTag AbilityTagToActivate)
+{
+	//태그 유효성 검사
+	check(AbilityTagToActivate.IsValid());
+
+	//Ability Spec 포인터 저장을 위한 배열
+	TArray<FGameplayAbilitySpec*> FoundAbilitySpecs;
+	//ASC가 가진 어빌리티 중에서 활성화 가능하고  AbilityTagToActivate를 모두 포함하는 Spec을 찾아 배열에 채워넣기
+	GetActivatableGameplayAbilitySpecsByAllMatchingTags(AbilityTagToActivate.GetSingleTagContainer(), FoundAbilitySpecs);
+
+	//태그와 일치하는 어빌리티를 찾았다면
+	if (!FoundAbilitySpecs.IsEmpty())
+	{
+		//일치하는 어빌리티가 여러 개 라면 무작위 인덱스 선택
+		const int32 RandomAbilityIndex = FMath::RandRange(0, FoundAbilitySpecs.Num() - 1);
+		//그 인덱스를 이용해 Spec하나 고르기
+		FGameplayAbilitySpec* SpecToActivate = FoundAbilitySpecs[RandomAbilityIndex];
+
+		check(SpecToActivate);
+
+		//고른 어빌리티가 활성화 되지 않았다면
+		if (!SpecToActivate->IsActive())
+		{
+			//활성화 시도 후 결과 리턴
+			return TryActivateAbility(SpecToActivate->Handle);
+		}
+	}
+	return false;
 }

@@ -4,7 +4,7 @@
 #include "WarriorCharacterAnimInstance.h"
 #include "ActionRPG/Character/ActionRPGBaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
+#include "KismetAnimationLibrary.h"
 
 void UWarriorCharacterAnimInstance::NativeInitializeAnimation()
 {
@@ -26,4 +26,7 @@ void UWarriorCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaT
 
 	//가속 여부
 	bHasAcceleration = OwningMovementComponent->GetCurrentAcceleration().SizeSquared2D() > 0.f;
+
+	//회전 계산
+	LocomotionDirection = UKismetAnimationLibrary::CalculateDirection(OwningCharacter->GetVelocity(), OwningCharacter->GetActorRotation());
 }

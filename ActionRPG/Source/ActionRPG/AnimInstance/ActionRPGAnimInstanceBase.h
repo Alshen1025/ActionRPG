@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "GameplayTagContainer.h"
 #include "ActionRPGAnimInstanceBase.generated.h"
 
 /**
@@ -14,4 +15,7 @@ class ACTIONRPG_API UActionRPGAnimInstanceBase : public UAnimInstance
 {
 	GENERATED_BODY()
 	
+protected:
+	UFUNCTION(BlueprintPure, meta = (BlueprintThreadSafe))
+	bool DoesOwnerHaveTag(FGameplayTag TagToCheck) const;
 };

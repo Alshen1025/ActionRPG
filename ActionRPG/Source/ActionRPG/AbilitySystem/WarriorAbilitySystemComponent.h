@@ -27,4 +27,8 @@ public:
 	//UPARAM(ref) 입력(Input) 블루프린트에서 핀이면서 동시에 출력(Output) 핀으로 만들기
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
 	void RemovedGrantedHeroWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove);
+
+	//Tag로 어빌리티 활성화
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
+	bool TryActivateAbilityByTag(FGameplayTag AbilityTagToActivate);
 };
