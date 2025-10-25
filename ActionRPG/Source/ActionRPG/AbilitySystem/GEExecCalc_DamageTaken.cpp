@@ -55,7 +55,7 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 
 	float SourceAttackPower = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetWarriorDamageCapture().AttackPowerDef, EvaluateParameters, SourceAttackPower);
-	//Debug::Print(TEXT("SourceAttackPower"), SourceAttackPower);
+	Debug::Print(TEXT("SourceAttackPower"), SourceAttackPower);
 
 	float BaseDamage = 0.f;
 	int32 UsedLightAttckComboCount = 0;
@@ -68,28 +68,28 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Public_SetByCaller_BaseDamage))
 		{
 			BaseDamage = TagMagnitude.Value;
-			//Debug::Print(TEXT("BaseDamage"), BaseDamage);
+			Debug::Print(TEXT("BaseDamage"), BaseDamage);
 		}
 
 		// 'Light Attack' 태그가 있다면 그 값을 콤보 카운트 변수에 저장
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Player_SetByCaller_AttackType_Light))
 		{
 			UsedLightAttckComboCount = TagMagnitude.Value;
-			//Debug::Print(TEXT("UsedLightAttckComboCount"), UsedLightAttckComboCount);
+			Debug::Print(TEXT("UsedLightAttckComboCount"), UsedLightAttckComboCount);
 		}
 
 		// 'Heavy Attack' 태그가 있다면 그 값을 콤보 카운트 변수에 저장
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Player_SetByCaller_AttackType_Heavy))
 		{
 			UsedHeavyAttackComboCount = TagMagnitude.Value;
-			//Debug::Print(TEXT("UsedHeavyAttackComboCount"), UsedHeavyAttackComboCount);
+			Debug::Print(TEXT("UsedHeavyAttackComboCount"), UsedHeavyAttackComboCount);
 		}
 	}
 
 	float TargetDefensePower = 0.f;
 	// 이전에 정의한 DefensePower 캡처 설정을 사용최종 방어력 값 설정
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetWarriorDamageCapture().DefensePowerDef, EvaluateParameters, TargetDefensePower);
-	//Debug::Print(TEXT("TargetDefensePower"), TargetDefensePower);
+	Debug::Print(TEXT("TargetDefensePower"), TargetDefensePower);
 
 	//LightAttck 보너스 계산
 	if (UsedLightAttckComboCount != 0)
@@ -98,19 +98,19 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 		const float DamageIncreasePercentLight = (UsedLightAttckComboCount - 1) * 0.05 + 1.f;
 		//데미지 계산
 		BaseDamage *= DamageIncreasePercentLight;
-		//Debug::Print(TEXT("ScaledBaseDamageLight"), BaseDamage);
+		Debug::Print(TEXT("ScaledBaseDamageLight"), BaseDamage);
 	}
 
 	if (UsedHeavyAttackComboCount != 0)
 	{
 		const float DamageIncreasePercentHeavy = UsedHeavyAttackComboCount * 0.15f + 1.f;
 		BaseDamage *= DamageIncreasePercentHeavy;
-		//Debug::Print(TEXT("ScaledBaseDamageHeavy"), BaseDamage);
+		Debug::Print(TEXT("ScaledBaseDamageHeavy"), BaseDamage);
 	}
 
 	//최종 데미지 산출
 	const float FinalDamageDone = BaseDamage * SourceAttackPower / TargetDefensePower;
-	//Debug::Print(TEXT("FinalDamageDone"), FinalDamageDone);
+	Debug::Print(TEXT("FinalDamageDone"), FinalDamageDone);
 
 	if (FinalDamageDone > 0.f)
 	{
