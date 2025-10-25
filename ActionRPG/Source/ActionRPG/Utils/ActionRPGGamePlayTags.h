@@ -44,6 +44,8 @@ namespace WarriorGameplayTags
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
 	//∏ÛΩ∫≈Õ AI
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_Strafing);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_UnderAttack);
+
 
 	//Public Tag
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Public_Event_MeleeHit);

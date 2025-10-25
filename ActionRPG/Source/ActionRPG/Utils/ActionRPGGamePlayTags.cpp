@@ -41,6 +41,8 @@ namespace WarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Enemy_Weapon, "Enemy.Weapon");
 	//∏ÛΩ∫≈Õ AI
 	UE_DEFINE_GAMEPLAY_TAG(Enemy_Status_Strafing, "Enemy.Status.Strafing");
+	UE_DEFINE_GAMEPLAY_TAG(Enemy_Status_UnderAttack, "Enemy.Status.UnderAttack");
+
 
 	//Public Tag
 	UE_DEFINE_GAMEPLAY_TAG(Public_Event_MeleeHit, "Public.Event.MeleeHit");

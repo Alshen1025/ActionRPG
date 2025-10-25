@@ -4,6 +4,7 @@
 #include "ActionRPGBaseCharacter.h"
 #include "ActionRPG/AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "ActionRPG/AbilitySystem/WarriorAttributeSet.h"
+#include "MotionWarpingComponent.h"
 
 AActionRPGBaseCharacter::AActionRPGBaseCharacter()
 {
@@ -14,6 +15,7 @@ AActionRPGBaseCharacter::AActionRPGBaseCharacter()
 
 	WarriorAbilitySystemComponent = CreateDefaultSubobject<UWarriorAbilitySystemComponent>(TEXT("WarriorAbilitySystemComponenet"));
 	WarriorAttributeSet = CreateDefaultSubobject<UWarriorAttributeSet>(TEXT("WarriorAttributeSet"));
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
 }
 
 void AActionRPGBaseCharacter::PossessedBy(AController* NewController)
