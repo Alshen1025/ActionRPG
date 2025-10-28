@@ -6,6 +6,9 @@
 #include "ActionRPG/AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "ActionRPG/Interface/PawnCombatInterface.h"
 #include "GenericTeamAgentInterface.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "ActionRPG/Utils/ActionRPGGamePlayTags.h"
+
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActior(AActor* Actor)
 {
 	check(Actor);
@@ -88,4 +91,58 @@ bool UWarriorFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* Targe
 	}
 
 	return false;
+}
+
+float UWarriorFunctionLibrary::GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, float InLevel)
+{
+	return InScalableFloat.GetValueAtLevel(InLevel);
+}
+
+FGameplayTag UWarriorFunctionLibrary::ComputeHitReactDirectionTag(AActor* InAttacker, AActor* InVictim, float& OutAngleDifference)
+{
+	check(InAttacker && InVictim);
+
+	//액터가 바라보고 있는 방향
+	const FVector VictimForward = InVictim->GetActorForwardVector();
+
+	//피해자가 Attacker를 향하는 방향벡터 -> 정규화
+	const FVector VictimToAttackerNormalized = (InAttacker->GetActorLocation() - InVictim->GetActorLocation()).GetSafeNormal();
+
+	//피해자가 바라보는 방향 벡터와 공격자를 향한 벡터의 내적 계산
+	const float DotResult = FVector::DotProduct(VictimForward, VictimToAttackerNormalized);
+
+	//0도에서 180도 사이의 각도
+	OutAngleDifference = UKismetMathLibrary::DegAcos(DotResult);
+
+	//외적 계산
+	const FVector CrossResult = FVector::CrossProduct(VictimForward, VictimToAttackerNormalized);
+
+	//Z가 양수이면 Attacker는 나의 오른쪽
+	//음수이면 나의 왼쪽
+	//언리얼은 Z축 좌표계 사용
+	if (CrossResult.Z < 0.f)
+	{
+		//출력 파라미터
+		OutAngleDifference *= -1.f;
+	}
+
+	//방향에 따른 태그 반환
+	if (OutAngleDifference >= -45.f && OutAngleDifference <= 45.f)
+	{
+		return WarriorGameplayTags::Public_Status_HitReact_Front;
+	}
+	else if (OutAngleDifference < -45.f && OutAngleDifference >= -135.f)
+	{
+		return WarriorGameplayTags::Public_Status_HitReact_Left;
+	}
+	else if (OutAngleDifference < -135.f || OutAngleDifference>135.f)
+	{
+		return WarriorGameplayTags::Public_Status_HitReact_Back;
+	}
+	else if (OutAngleDifference > 45.f && OutAngleDifference <= 135.f)
+	{
+		return WarriorGameplayTags::Public_Status_HitReact_Right;
+	}
+
+	return WarriorGameplayTags::Public_Status_HitReact_Front;
 }

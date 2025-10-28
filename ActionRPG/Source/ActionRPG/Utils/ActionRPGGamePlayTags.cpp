@@ -12,6 +12,10 @@ namespace WarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_UnequipAxe, "InputTag.UnequipAxe");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_LightAttack_Axe, "InputTag.LightAttack.Axe");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_HeavyAttack_Axe, "InputTag.HeavyAttack.Axe");
+	UE_DEFINE_GAMEPLAY_TAG(InputTag_Roll, "InputTag.Roll");
+
+	UE_DEFINE_GAMEPLAY_TAG(InputTag_MustBeHeld, "InputTag.MustBeHeld");
+	UE_DEFINE_GAMEPLAY_TAG(InputTag_MustBeHeld_Block, "InputTag.MustBeHeld.Block");
 
 	//Player 관련 Tag
 	UE_DEFINE_GAMEPLAY_TAG(Player_Weapon_Axe, "Player.Weapon.Axe");
@@ -24,6 +28,18 @@ namespace WarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Attack_Light_Axe, "Player.Ability.Attack.Light.Axe");
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Attack_Heavy__Axe, "Player.Ability.Attack.Heavy.Axe");
 
+	//Rolling
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Roll, "Player.Ability.Roll");
+
+	//HitDirection
+	UE_DEFINE_GAMEPLAY_TAG(Public_Status_HitReact_Front, "Public.Status.HitReact.Front");
+	UE_DEFINE_GAMEPLAY_TAG(Public_Status_HitReact_Left, "Public.Status.HitReact.Left");
+	UE_DEFINE_GAMEPLAY_TAG(Public_Status_HitReact_Right, "Public.Status.HitReact.Right");
+	UE_DEFINE_GAMEPLAY_TAG(Public_Status_HitReact_Back, "Public.Status.HitReact.Back");
+
+	//Blocking
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Block, "Player.Ability.Block");
+
 	//Hit Pause
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_HitPause, "Player.Ability.HitPause");
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_HitPause, "Player.Event.HitPause");
@@ -34,6 +50,8 @@ namespace WarriorGameplayTags
 
 	//Status
 	UE_DEFINE_GAMEPLAY_TAG(Player_Status_JumpToFinisher, "Player.Status.JumpToFinisher");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Status_Rolling, "Player.Status.Rolling");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Status_Blocking, "Player.Status.Blocking");
 
 	//적대 몬스터
 	UE_DEFINE_GAMEPLAY_TAG(Enemy_Ability_Melee, "Enemy.Ability.Melee");
