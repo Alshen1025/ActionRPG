@@ -7,6 +7,7 @@
 #include "HeroGameplayAbility_TargetLock.generated.h"
 
 class UWarriorWidgetBase;
+class UInputMappingContext;
 
 
 UCLASS()
@@ -22,6 +23,9 @@ protected:
 	
 	UFUNCTION(BlueprintCallable)
 	void OnTargetLockTick(float DeltaTime);
+
+	UFUNCTION(BlueprintCallable)
+	void SwitchTarget(const FGameplayTag& InSwitchDirectionTag);
 
 private:
 	void TryLockOnTarget();
@@ -65,7 +69,26 @@ private:
 
 	void SetTargetLockWidgetPosition();
 
-	//RotateToTarget
+	//TargetLock
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
 	float TargetLockRotationInterpSpeed = 5.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	float TargetLockMaxWalkSpeed = 200.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	float TargetLockCameraOffsetDistance = 20.f;
+
+	void InitTargetLockMovement();
+	void InitTargetLockMappingContext();
+	void ResetTargetLockMovement();
+	void ResetTargetLockMappingContext();
+
+	UPROPERTY()
+	float CachedDefaultMaxWalkSpeed = 0.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	UInputMappingContext* TargetLockMappingContext;
+
+	void GetAvailableActorsAroundTarget(TArray<AActor*>& OutActorsOnLeft, TArray<AActor*>& OutActorsOnRight);
 };

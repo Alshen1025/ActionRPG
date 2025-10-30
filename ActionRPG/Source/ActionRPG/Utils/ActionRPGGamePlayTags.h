@@ -23,6 +23,11 @@ namespace WarriorGameplayTags
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_Toggleable);
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_Toggleable_TargetLock);
 
+	//TargetLock->SwitchTarget
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_SwitchTarget);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Event_SwitchTarget_Left);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Event_SwitchTarget_Right);
+
 	//Player ฐüทร Tag
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Weapon_Axe);
 

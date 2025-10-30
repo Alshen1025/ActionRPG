@@ -12,7 +12,7 @@
 #include "ActionRPG/DataAsset/MyDataAsset_WarriorStartUpData.h"
 #include "ActionRPG/Conponents/Combat/HeroCombatComponent.h"
 #include "ActionRPG/Conponents/UI/HeroUIComponent.h"
-
+#include "AbilitySystemBlueprintLibrary.h"
 
 AWarriorCharacter::AWarriorCharacter()
 {
@@ -87,6 +87,9 @@ void AWarriorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
 
 	WarriorInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
+
+	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Triggered, this, &ThisClass::Input_SwitchTargetTriggered);
+	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Completed, this, &ThisClass::Input_SwitchTargetCompleted);
 }
 
 void AWarriorCharacter::BeginPlay()
@@ -144,4 +147,19 @@ void AWarriorCharacter::Input_AbilityInputPressed(const FInputActionInstance&,  
 void AWarriorCharacter::Input_AbilityInputReleased(const FInputActionInstance&, FGameplayTag InputTag)
 {
 	WarriorAbilitySystemComponent->OnAbilityInputReleased(InputTag);
+}
+
+void AWarriorCharacter::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
+{
+	SwitchDirection = InputActionValue.Get<FVector2D>();
+}
+
+void AWarriorCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue)
+{
+	FGameplayEventData Data;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this,
+		SwitchDirection.X > 0.f ? WarriorGameplayTags::Player_Event_SwitchTarget_Right : WarriorGameplayTags::Player_Event_SwitchTarget_Left,
+		Data);
 }
