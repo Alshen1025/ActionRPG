@@ -54,6 +54,10 @@ protected:
 	//무기에 맞은 Actor배열
 	TArray<AActor*> OverlappedActors;
 
+	virtual void ToggleCurrentEquippedWeaponCollision(bool bShouldEnable);
+	virtual void ToggleBodyCollsionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType);
+
+
 private:
 	//가지고 있는 무기
 	TMap<FGameplayTag, AWarriorWeaponBase*> CharacterCarriedWeaponMap;

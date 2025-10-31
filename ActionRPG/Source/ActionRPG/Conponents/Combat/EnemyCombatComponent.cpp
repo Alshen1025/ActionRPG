@@ -6,7 +6,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "ActionRPG/Utils/ActionRPGGamePlayTags.h"
 #include "ActionRPG/WarriorFunctionLibrary.h"
-
+#include "Components/BoxComponent.h"
+#include "ActionRPG/Character/WarriorEnemyCharacter.h"
 void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
 	if (OverlappedActors.Contains(HitActor))
@@ -52,5 +53,40 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 			WarriorGameplayTags::Public_Event_MeleeHit,
 			EventData
 		);
+	}
+}
+
+void UEnemyCombatComponent::ToggleBodyCollsionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+{
+	//형변환
+	AWarriorEnemyCharacter* OwningEnemyCharacter = GetOwningPawn<AWarriorEnemyCharacter>();
+
+	check(OwningEnemyCharacter);
+
+	//양손 CollisionBox얻어오기
+	UBoxComponent* LeftHandCollisionBox = OwningEnemyCharacter->GetLeftHandCollisionBox();
+	UBoxComponent* RightHandCollisionBox = OwningEnemyCharacter->GetRightHandCollisionBox();
+
+	check(LeftHandCollisionBox && RightHandCollisionBox);
+
+	//CollisionToggle
+	switch (ToggleDamageType)
+	{
+	case EToggleDamageType::LeftHand:
+		LeftHandCollisionBox->SetCollisionEnabled(bShouldEnable ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+		break;
+
+	case EToggleDamageType::RightHand:
+		RightHandCollisionBox->SetCollisionEnabled(bShouldEnable ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+		break;
+
+	default:
+		break;
+	}
+
+	//
+	if (!bShouldEnable)
+	{
+		OverlappedActors.Empty();
 	}
 }
