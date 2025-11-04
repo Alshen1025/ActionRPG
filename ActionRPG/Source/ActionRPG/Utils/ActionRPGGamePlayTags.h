@@ -15,6 +15,14 @@ namespace WarriorGameplayTags
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_HeavyAttack_Axe);
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_Roll);
 
+	//특수 능력
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_SpecialWeaponAbility_Light);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_SpecialWeaponAbility_Heavy);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_SpecialWeaponAbility_Light);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_SpecialWeaponAbility_Heavy);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Cooldown_SpecialWeaponAbility_Light);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Cooldown_SpecialWeaponAbility_Heavy);
+
 	//Hold
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_MustBeHeld);
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_MustBeHeld_Block);
@@ -78,6 +86,9 @@ namespace WarriorGameplayTags
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_Strafing);
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_UnderAttack);
 
+	//몬스터 스폰
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Ability_SummonEnemies);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Event_SummonEnemies);
 
 	//Public Tag
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Public_Event_MeleeHit);

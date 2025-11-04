@@ -26,6 +26,18 @@ struct FWarriorHeroAbilitySet
 };
 
 USTRUCT(BlueprintType)
+struct FWarriorHeroSpecialAbilitySet : public FWarriorHeroAbilitySet
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSoftObjectPtr<UMaterialInterface> SoftAbilityIconMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "Player.Cooldown"))
+	FGameplayTag AbilityCooldownTag;
+};
+
+USTRUCT(BlueprintType)
 struct FWarriorHeroWeaponData
 {
 	GENERATED_BODY()
@@ -37,6 +49,9 @@ struct FWarriorHeroWeaponData
 	//무기 장착시 부여할 어빌리티, Unequip같은 경우 무기 장착 시 부여
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
 	TArray<FWarriorHeroAbilitySet> DefualtWeaponAvbilities;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
+	TArray<FWarriorHeroSpecialAbilitySet> SpecialWeaponAbilities;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UInputMappingContext* WeaponInputMappingContext;

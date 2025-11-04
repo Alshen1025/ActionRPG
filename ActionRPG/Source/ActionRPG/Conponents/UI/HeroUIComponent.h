@@ -4,11 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "ActionRPG/Conponents/UI/PawnUIComponent.h"
+#include "GameplayTagContainer.h"
 #include "HeroUIComponent.generated.h"
+
 
 //무기 아이콘 업데이트
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEquippedWeaponChangedDelegate, TSoftObjectPtr<UTexture2D>, SoftWeaponIcon);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAbilityIconSlotUpdatedDelegate, FGameplayTag, AbilityInputTag, TSoftObjectPtr<UMaterialInterface>, SoftAbilityIconMaterial);
 
 UCLASS()
 class ACTIONRPG_API UHeroUIComponent : public UPawnUIComponent
@@ -21,4 +24,7 @@ public:
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnEquippedWeaponChangedDelegate OnEquippedWeaponChanged;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnAbilityIconSlotUpdatedDelegate OnAbilityIconSlotUpdated;
 };
