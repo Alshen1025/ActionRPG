@@ -63,3 +63,4 @@ struct FWarriorHeroWeaponData
 	TSoftObjectPtr<UTexture2D> SoftWeaponIconTexture;
 };
 
+
