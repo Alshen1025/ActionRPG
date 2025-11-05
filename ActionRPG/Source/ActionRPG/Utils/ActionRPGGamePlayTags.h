@@ -22,6 +22,7 @@ namespace WarriorGameplayTags
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_SpecialWeaponAbility_Heavy);
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Cooldown_SpecialWeaponAbility_Light);
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Cooldown_SpecialWeaponAbility_Heavy);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Event_AOE);
 
 	//Hold
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_MustBeHeld);

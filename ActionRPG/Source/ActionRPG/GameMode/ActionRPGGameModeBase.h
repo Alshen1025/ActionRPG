@@ -13,5 +13,7 @@ UCLASS()
 class ACTIONRPG_API AActionRPGGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AActionRPGGameModeBase();
 };

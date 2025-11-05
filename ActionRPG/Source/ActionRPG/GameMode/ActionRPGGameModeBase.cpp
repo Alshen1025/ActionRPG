@@ -3,3 +3,8 @@
 
 #include "ActionRPGGameModeBase.h"
 
+AActionRPGGameModeBase::AActionRPGGameModeBase()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+}
