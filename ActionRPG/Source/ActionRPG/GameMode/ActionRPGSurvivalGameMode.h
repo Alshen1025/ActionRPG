@@ -73,7 +73,10 @@ private:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnSurvialGameModeStateChangedDelegate OnSurvialGameModeStateChanged;
 
-#pragma region Monster Spawn Property
+#pragma region Monster Spawn
+	int32 TrySpawnWaveEnemies();
+	bool ShouldKeepSpawnEnemies() const;
+
 	//몬스터 스폰 관리 데이터 테이블
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	UDataTable* EnemyWaveSpawnerDataTable;
@@ -90,7 +93,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float SpawnNewWaveWaitTime = 5.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float SpawnEnemiesDelayTime = 2.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
@@ -100,5 +103,25 @@ private:
 	UPROPERTY()
 	TMap< TSoftClassPtr < AWarriorEnemyCharacter >, UClass* > PreLoadedEnemyClassMap;
 
+	UPROPERTY()
+	int32 CurrentSpawnedEnemiesCounter = 0;
+
+	UPROPERTY()
+	int32 TotalSpawnedEnemiesThisWaveCounter = 0;
+
+	UPROPERTY()
+	TArray<AActor*> TargetPointsArray;
+
+	//적이 파괴된 경우
+	UFUNCTION()
+	void OnEnemyDestroyed(AActor* DestroyedActor);
+
 #pragma endregion
+
+
+public:
+
+	//Sapwn된 적 등록
+	UFUNCTION(BlueprintCallable)
+	void RegisterSpawnedEnemies(const TArray<AWarriorEnemyCharacter*>& InEnemiesToRegister);
 };

@@ -11,6 +11,7 @@
 #include "ActionRPG/Widget/WarriorWidgetBase.h"
 #include "Components/BoxComponent.h"
 #include "ActionRPG/WarriorFunctionLibrary.h"
+#include "ActionRPG/GameMode/ActionRPGGameModeBase.h"
 
 AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 {
@@ -110,15 +111,41 @@ void AWarriorEnemyCharacter::InitEnemyStartUpData()
 	{
 		return;
 	}
+	int32 AbilityApplyLevel = 1;
+
+	if (AActionRPGGameModeBase* BaseGameMode = GetWorld()->GetAuthGameMode<AActionRPGGameModeBase>())
+	{
+		switch (BaseGameMode->GetCurrentGameDifficulty())
+		{
+		case EWarriorGameDifficulty::Easy:
+			AbilityApplyLevel = 1;
+			break;
+
+		case EWarriorGameDifficulty::Normal:
+			AbilityApplyLevel = 2;
+			break;
+
+		case EWarriorGameDifficulty::Hard:
+			AbilityApplyLevel = 3;
+			break;
+
+		case EWarriorGameDifficulty::VeryHard:
+			AbilityApplyLevel = 4;
+			break;
+
+		default:
+			break;
+		}
+	}
 	//비 동기 로딩
 	UAssetManager::GetStreamableManager().RequestAsyncLoad(
 		CharacterStartUpData.ToSoftObjectPath(),
 		FStreamableDelegate::CreateLambda(
-			[this]()
+			[this, AbilityApplyLevel]()
 			{
 				if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.Get())
 				{
-					LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
+					LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent, AbilityApplyLevel);
 				}
 			}
 		)

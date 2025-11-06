@@ -43,8 +43,7 @@ void AActionRPGSurvivalGameMode::Tick(float DeltaTime)
 
 		if (TimePassedSinceStart >= SpawnEnemiesDelayTime)
 		{
-			//TODO:Handle spawn new enemies
-
+			CurrentSpawnedEnemiesCounter += TrySpawnWaveEnemies();
 			TimePassedSinceStart = 0.f;
 
 			SetCurrentSurvialGameModeState(EWarriorSurvialGameModeState::InProgress);
@@ -86,12 +85,113 @@ bool AActionRPGSurvivalGameMode::HasFinishedAllWaves() const
 	return CurrentWaveCount > TotalWavesToSpawn;
 }
 
+int32 AActionRPGSurvivalGameMode::TrySpawnWaveEnemies()
+{
+	//Target포인트 확인
+	if (TargetPointsArray.IsEmpty())
+	{
+		UGameplayStatics::GetAllActorsOfClass(this, ATargetPoint::StaticClass(), TargetPointsArray);
+	}
+
+	checkf(!TargetPointsArray.IsEmpty(), TEXT("No valid target point found in level: %s for spawning enemies"), *GetWorld()->GetName());
+	
+	uint32 EnemiesSpawnedThisTime = 0;
+
+	//ActorSpawnParam설정
+	FActorSpawnParameters SpawnParam;
+	SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	
+	for (const FWarriorEnemyWaveSpawnerInfo& SpawnerInfo : GetCurrentWaveSpawnerTableRow()->EnemyWaveSpawnerDefinitions)
+	{
+		if (SpawnerInfo.SoftEnemyClassToSpawn.IsNull()) continue;
+
+		const int32 NumToSpawn = FMath::RandRange(SpawnerInfo.MinPerSpawnCount, SpawnerInfo.MaxPerSpawnCount);
+
+		//이전 웨이브에 로딩된 클래스 사용
+		UClass* LoadedEnemyClass = PreLoadedEnemyClassMap.FindChecked(SpawnerInfo.SoftEnemyClassToSpawn);
+
+		//스폰할 몬스터 수 만큼
+		for (int32 i = 0; i < NumToSpawn; i++)
+		{
+			//랜덤 TargetPoint
+			const int32 RandomTargetPointIndex = FMath::RandRange(0, TargetPointsArray.Num() - 1);
+			const FVector SpawnOrigin = TargetPointsArray[RandomTargetPointIndex]->GetActorLocation();
+			const FRotator SpawnRotation = TargetPointsArray[RandomTargetPointIndex]->GetActorForwardVector().ToOrientationRotator();
+
+			//범위내 무작위
+			FVector RandomLocation;
+			UNavigationSystemV1::K2_GetRandomLocationInNavigableRadius(this, SpawnOrigin, RandomLocation, 400.f);
+
+			//150만큼 위로
+			RandomLocation += FVector(0.f, 0.f, 150.f);
+
+			//스폰
+			AWarriorEnemyCharacter* SpawnedEnemy = GetWorld()->SpawnActor<AWarriorEnemyCharacter>(LoadedEnemyClass, RandomLocation, SpawnRotation, SpawnParam);
+
+			if (SpawnedEnemy)
+			{
+				SpawnedEnemy->OnDestroyed.AddUniqueDynamic(this, &ThisClass::OnEnemyDestroyed);
+				EnemiesSpawnedThisTime++;
+				TotalSpawnedEnemiesThisWaveCounter++;
+			}
+
+			if (!ShouldKeepSpawnEnemies())
+			{
+				return EnemiesSpawnedThisTime;
+			}
+		}
+	}
+
+	return EnemiesSpawnedThisTime;
+}
+
+bool AActionRPGSurvivalGameMode::ShouldKeepSpawnEnemies() const
+{
+	return TotalSpawnedEnemiesThisWaveCounter < GetCurrentWaveSpawnerTableRow()->TotalEnemyToSpawnThisWave;
+}
+
+void AActionRPGSurvivalGameMode::OnEnemyDestroyed(AActor* DestroyedActor)
+{
+	//현재 생성된 적 --
+	CurrentSpawnedEnemiesCounter--;
+
+	//스폰해야할 몬스터가 남아있으면
+	if (ShouldKeepSpawnEnemies())
+	{
+		CurrentSpawnedEnemiesCounter += TrySpawnWaveEnemies();
+	}
+	//없으면
+	else if (CurrentSpawnedEnemiesCounter == 0)
+	{
+		TotalSpawnedEnemiesThisWaveCounter = 0;
+		CurrentSpawnedEnemiesCounter = 0;
+
+		SetCurrentSurvialGameModeState(EWarriorSurvialGameModeState::WaveCompleted);
+	}
+}
+
+void AActionRPGSurvivalGameMode::RegisterSpawnedEnemies(const TArray<AWarriorEnemyCharacter*>& InEnemiesToRegister)
+{
+	for (AWarriorEnemyCharacter* SpawnedEnemy : InEnemiesToRegister)
+	{
+		if (SpawnedEnemy)
+		{
+			CurrentSpawnedEnemiesCounter++;
+
+			SpawnedEnemy->OnDestroyed.AddUniqueDynamic(this, &ThisClass::OnEnemyDestroyed);
+		}
+	}
+}
+
 void AActionRPGSurvivalGameMode::PreLoadNextWaveEnemies()
 {
 	if (HasFinishedAllWaves())
 	{
 		return;
 	}
+
+	PreLoadedEnemyClassMap.Empty();
 
 	for (const FWarriorEnemyWaveSpawnerInfo& SpawnerInfo : GetCurrentWaveSpawnerTableRow()->EnemyWaveSpawnerDefinitions)
 	{
@@ -106,8 +206,6 @@ void AActionRPGSurvivalGameMode::PreLoadNextWaveEnemies()
 					if (UClass* LoadedEnemyClass = SpawnerInfo.SoftEnemyClassToSpawn.Get())
 					{
 						PreLoadedEnemyClassMap.Emplace(SpawnerInfo.SoftEnemyClassToSpawn, LoadedEnemyClass);
-
-						Debug::Print(LoadedEnemyClass->GetName() + TEXT(" is loaded"));
 					}
 				}
 			)
