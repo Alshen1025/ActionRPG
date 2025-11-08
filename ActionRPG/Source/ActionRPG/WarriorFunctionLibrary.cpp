@@ -10,6 +10,8 @@
 #include "ActionRPG/Utils/ActionRPGGamePlayTags.h"
 #include "WarriorTypes/WarriorCountDownAction.h"
 #include "WarriorGameInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "SaveGame/WarriorSaveGame.h"
 
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActior(AActor* Actor)
 {
@@ -251,4 +253,37 @@ void UWarriorFunctionLibrary::ToggleInputMode(const UObject* WorldContextObject,
 	default:
 		break;
 	}
+}
+
+void UWarriorFunctionLibrary::SaveCurrentGameDifficulty(EWarriorGameDifficulty InDifficultyToSave)
+{
+	//SaveGame설정
+	USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(UWarriorSaveGame::StaticClass());
+
+	//
+	if (UWarriorSaveGame* WarriorSaveGameObject = Cast<UWarriorSaveGame>(SaveGameObject))
+	{
+		//난이도 저장
+		WarriorSaveGameObject->SavedCurrentGameDifficulty = InDifficultyToSave;
+		//SaveGame저장
+		UGameplayStatics::SaveGameToSlot(WarriorSaveGameObject, WarriorGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
+	}
+}
+
+bool UWarriorFunctionLibrary::TryLoadSavedGameDifficulty(EWarriorGameDifficulty& OutSavedDifficulty)
+{
+	if (UGameplayStatics::DoesSaveGameExist(WarriorGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0))
+	{
+		//SaveGame Load
+		USaveGame* SaveGameObject = UGameplayStatics::LoadGameFromSlot(WarriorGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
+
+		//저장한 난이도 불러오기
+		if (UWarriorSaveGame* WarriorSaveGameObject = Cast<UWarriorSaveGame>(SaveGameObject))
+		{
+			OutSavedDifficulty = WarriorSaveGameObject->SavedCurrentGameDifficulty;
+			return true;
+		}
+	}
+
+	return false;
 }

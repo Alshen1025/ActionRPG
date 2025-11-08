@@ -57,6 +57,7 @@ class ACTIONRPG_API AActionRPGSurvivalGameMode : public AActionRPGGameModeBase
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
 private:
 	void SetCurrentSurvialGameModeState(EWarriorSurvialGameModeState InState);

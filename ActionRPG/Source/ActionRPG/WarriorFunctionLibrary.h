@@ -61,5 +61,12 @@ public:
 	//Input모드 전환
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary", meta = (WorldContext = "WorldContextObject"))
 	static void ToggleInputMode(const UObject* WorldContextObject, EWarriorInputMode InInputMode);
+
+	//난이도 설정, 저장
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary")
+	static void SaveCurrentGameDifficulty(EWarriorGameDifficulty InDifficultyToSave);
+
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary")
+	static bool TryLoadSavedGameDifficulty(EWarriorGameDifficulty& OutSavedDifficulty);
 };
 

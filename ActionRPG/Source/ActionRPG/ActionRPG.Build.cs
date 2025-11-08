@@ -9,7 +9,7 @@ public class ActionRPG : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags" , "GameplayTasks", "AnimGraphRuntime" , "MotionWarping", "Niagara"
-        , "NavigationSystem" , "GameplayAbilities"});
+        , "NavigationSystem" , "GameplayAbilities", "MoviePlayer"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

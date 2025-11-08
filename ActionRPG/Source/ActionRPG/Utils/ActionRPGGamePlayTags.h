@@ -106,4 +106,5 @@ namespace WarriorGameplayTags
 	//게임 데이터
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_Level_SurvivalGameModeMap);
 	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_Level_MainMenuMap);
+	ACTIONRPG_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_SaveGame_Slot_1);
 }

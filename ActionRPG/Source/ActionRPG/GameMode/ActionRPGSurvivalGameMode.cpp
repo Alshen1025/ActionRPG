@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/TargetPoint.h"
 #include "NavigationSystem.h"
+#include "ActionRPG/WarriorFunctionLibrary.h"
 
 void AActionRPGSurvivalGameMode::BeginPlay()
 {
@@ -72,6 +73,18 @@ void AActionRPGSurvivalGameMode::Tick(float DeltaTime)
 		}
 	}
 	//
+}
+
+void AActionRPGSurvivalGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	EWarriorGameDifficulty SavedGameDifficulty;
+
+	if (UWarriorFunctionLibrary::TryLoadSavedGameDifficulty(SavedGameDifficulty))
+	{
+		CurrentGameDifficulty = SavedGameDifficulty;
+	}
 }
 
 void AActionRPGSurvivalGameMode::SetCurrentSurvialGameModeState(EWarriorSurvialGameModeState InState)
