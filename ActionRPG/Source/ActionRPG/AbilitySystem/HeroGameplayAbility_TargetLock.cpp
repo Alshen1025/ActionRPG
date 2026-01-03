@@ -140,7 +140,7 @@ void UHeroGameplayAbility_TargetLock::GetAvailableActorsToLock()
 		BoxTraceChannel, //감지 오브젝트 유형
 		false,
 		TArray<AActor*>(), 
-		bShowPersistentDebugShape ? EDrawDebugTrace::Persistent : EDrawDebugTrace::None,
+		EDrawDebugTrace::None,
 		BoxTraceHits, //결과 배열
 		true //자신 제외
 	);
@@ -154,7 +154,7 @@ void UHeroGameplayAbility_TargetLock::GetAvailableActorsToLock()
 			{
 				AvailableActorsToLock.AddUnique(HitActor);
 
-				Debug::Print(HitActor->GetActorNameOrLabel());
+				//Debug::Print(HitActor->GetActorNameOrLabel());
 			}
 		}
 	}
